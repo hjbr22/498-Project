@@ -1,0 +1,21 @@
+For this milestone, you should answer #1 and #2 and then answer at least four of the remaining questions for the full score, if any project can not identify a total of six questions from this list, let's talk early about why and get more questions added:
+
+What is the GitHub URL for your branch's commits?  
+
+    https://github.com/hjbr22/498-Project/
+
+Which user stories did your team implement?  Include the text of those user stories here (but you do not need to include any associated graphics).
+
+    Researcher
+        - As a developer looking to benefit those that use the application
+        - I want to collect accurate data to be represented in the interactive map
+        - so that the functionality of the map isn’t compromised by bad data.
+    Front-End Usage → Map – Anna Neal
+        - As a team member trying to create the actual representation of the front-end
+        - I want to have a map of the UK’s parking facilities
+        - So that it can be connected to the interactive part of the GUI & database
+
+What problems did your team encounter during implementation?  How did you solve these?
+Is there any missing functionality for those user stories?  If so, how does your team plan to address it?
+How did each team member contribute to this milestone?
+What did you learn or observe about the style, quantity or quality of the codebase that you were modifying? 
