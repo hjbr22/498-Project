@@ -17,7 +17,7 @@ For this milestone, you should answer #1 and #2 and then answer at least four of
     Front-End Usage -> Webpage -> Anna Neal, Hunter Brogna
         - As a front-end developer looking for a place to store our application
         - I want to have an html static site with styling
-        - To allow users to select a pass, dya, and tiem that they'd like to park
+        - To allow users to select a pass, day, and item that they'd like to park
 
 3. What problems did your team encounter during implementation?  How did you solve these?
 
@@ -34,8 +34,8 @@ For this milestone, you should answer #1 and #2 and then answer at least four of
 
 5. How did each team member contribute to this milestone?
 
-    Each team member did a part of the user stories above to help aid in figruing out what needs to be done for the final project. There wasn't much disagreement on who wanted to do what, so most of the effort was based on hwo to get each user story done.
+    Each team member did a part of the user stories above to help aid in figruing out what needs to be done for the final project. There wasn't much disagreement on who wanted to do what, so most of the effort was based on how to get each user story done. Grant and Anna started developing the front-end with the webpage and map development. Avery and Ryan gathered our parking data and put it into an organized excel sheet, and Hunter and Michaela started working on python files that will allow the gathered data to interact with the front-end map. 
 
 6. What did you learn or observe about the style, quantity or quality of the codebase that you were modifying? 
 
-    We wanted to make the codebase as organized as possible due to their needing to be a lot of different files and points that do different things. It feels very much like a work environment compared to what we are normally doing with programming files. The quality of the code feels much more orchastrated and fine tuned compared the sparatic coding style we are used to. 
+    We wanted to make the codebase as organized as possible due to there needing to be a lot of different files and points that do different things. It feels very much like a work environment compared to what we are normally doing with programming files. The quality of the code feels much more orchastrated and fine tuned compared the sparatic coding style we are used to. 
