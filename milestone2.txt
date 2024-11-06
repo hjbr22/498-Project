@@ -6,7 +6,7 @@ For this milestone, you should answer #1 and #2 and then answer at least four of
 
 2. Which user stories did your team implement?  Include the text of those user stories here (but you do not need to include any associated graphics).
 
-    Researcher - Avery Elliot, Ryan Ennis, Michaela Winfree
+    Researcher - Avery Elliott, Ryan Ennis, Michaela Winfree
         - As a developer looking to benefit those that use the application
         - I want to collect accurate data to be represented in the interactive map
         - so that the functionality of the map isn’t compromised by bad data.
