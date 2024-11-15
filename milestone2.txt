@@ -1,0 +1,41 @@
+For this milestone, you should answer #1 and #2 and then answer at least four of the remaining questions for the full score, if any project can not identify a total of six questions from this list, let's talk early about why and get more questions added:
+
+1. What is the GitHub URL for your branch's commits?  
+
+    https://github.com/hjbr22/498-Project/
+
+2. Which user stories did your team implement?  Include the text of those user stories here (but you do not need to include any associated graphics).
+
+    Researcher - Avery Elliott, Ryan Ennis, Michaela Winfree
+        - As a developer looking to benefit those that use the application
+        - I want to collect accurate data to be represented in the interactive map
+        - so that the functionality of the map isn’t compromised by bad data.
+    Front-End Usage →  Grant Klingenberg, Hunter Brogna
+        - As a team member trying to create the actual representation of the front-end
+        - I want to have a map of the UK’s parking facilities
+        - So that it can be connected to the interactive part of the GUI & database
+    Front-End Usage -> Webpage -> Anna Neal, Hunter Brogna
+        - As a front-end developer looking for a place to store our application
+        - I want to have an html static site with styling
+        - To allow users to select a pass, day, and item that they'd like to park
+
+3. What problems did your team encounter during implementation?  How did you solve these?
+
+    The main problem was the learning curve of learning how to implement everything into a product. 
+    Throughout our time here at UK, our projects have only been about completely the pieces of the projects, but not the entirety of it. 
+    This taking on something bigger than most of us have experienced before. 
+    The way we solved this was to research and trust what we have learned already. 
+    Some of our team members have experience in this area, so we have been leaning on them. 
+
+4. Is there any missing functionality for those user stories?  If so, how does your team plan to address it?
+
+    The missing functionality isn't necessarily due to the existing user stories, but rather needing more than we initially thought. 
+    Our team addressed it by compromising and understanding we might need to do more than we thought we might need to do. 
+
+5. How did each team member contribute to this milestone?
+
+    Each team member did a part of the user stories above to help aid in figuring out what needs to be done for the final project. There wasn't much disagreement on who wanted to do what, so most of the effort was based on how to get each user story done. Grant and Anna started developing the front-end with the webpage and map development. Avery and Ryan gathered our parking data and put it into an organized excel sheet, and Hunter and Michaela started working on python files that will allow the gathered data to interact with the front-end map. 
+
+6. What did you learn or observe about the style, quantity or quality of the codebase that you were modifying? 
+
+    We wanted to make the codebase as organized as possible due to there needing to be a lot of different files and points that do different things. It feels very much like a work environment compared to what we are normally doing with programming files. The quality of the code feels much more orchestrated and fine tuned compared the sparatic coding style we are used to. 

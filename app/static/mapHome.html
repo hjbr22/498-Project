@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>UKY Interactive Parking Map</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+</head>
+<body>
+
+    <header>
+        <h1> CS 498 Interactive Mapplication</h1>
+        <p>Input your information in order to find the best place to park!</p>
+    </header>
+
+    <div class="container">
+        <div class="selections">
+            <input type="text" id="textinput" height="100px" width="100px" placeholder="Enter your parking pass" ></input>
+            <select id="daySelect">
+                <option value="">Select Day</option>
+                <option value="sunday">Sunday</option>
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+                <option value="saturday">Saturday</option>
+            </select>
+
+            <select id="hourSelect">
+                <option value="">Hour</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+
+            <select id="minuteSelect">
+                <option value="">Minute</option>
+                <option value="00">00</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="45">45</option>
+            </select>
+
+            <label class="ampm-switch">
+                <input type="checkbox" id="" name="" value="" checked=""> 
+                <div class="toggle-button"></div>
+          </label>
+        </div>
+        <div class="map-container">
+            <!-- <img src="picMap.jpg" /> -->
+            <div id="map" style="height: 60vh; width: 60%;">
+                <script>
+
+                    var map = L.map('map').setView([38.0406, -84.5037], 13);
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 20,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    }).addTo(map);
+
+
+                    map.locate({ setView: true, maxZoom: 22, minZoom: 10});
+                    map.on('locationfound', function(e) {
+
+                        var meCircle = L.circle(e.latlng, {
+                            color: '#0033A0', 
+                            radius: e.accuracy / 4, 
+                            fillColor: '#0033A0', 
+                            fillOpacity: 0.5
+                        }).addTo(map);
+                        map.setView(e.latlng, 18);
+
+                        var meMarker = L.marker(e.latlng, {
+                            icon: L.icon({
+                                iconUrl: 'resources/mapsvg/danialruddy_marker.svg',
+                                iconSize: [54, 48],
+                                iconAnchor: [16, 44],
+                                popupAnchor: [0, -48]
+                            })
+                        }).addTo(map);
+                        meMarker.bindPopup("<b>You are here, give or take 100ft!</b>")/*.openPopup()*/;
+
+                    });
+                    map.on('locationerror', function(e) {
+                        alert("Location access denied. Please allow location access in your browser for proper functionality.");
+                    });
+
+
+                </script>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>UKY CS 498 
+            <br/>
+            Authors: Avery Elliot, Grant Klingenberg, Anna Neal, Michaela Winfree, Hunter Brogna, Ryan Ennis
+        </p>
+    </footer>
+
+    <script src="zoom.js"></script>
+</body>
+</html>
