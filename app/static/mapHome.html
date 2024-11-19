@@ -60,10 +60,19 @@
             </select>
 
             <label class="ampm-switch">
-                <input type="checkbox" id="" name="" value="" checked=""> 
+                <input type="checkbox" id="ampmToggle" name="" value="" checked=""> 
                 <div class="toggle-button"></div>
-          </label>
+            </label>
+
+            <button id="submitButton">Submit</button>
+
         </div>
+
+        <div id="output" style="display:none;">
+            <h3>Your Selected Information:</h3>
+            <p id="selectedInfo"></p>
+        </div>
+
         <div class="map-container">
             <!-- <img src="picMap.jpg" /> -->
             <div id="map" style="height: 60vh; width: 60%;">
@@ -117,5 +126,43 @@
     </footer>
 
     <script src="zoom.js"></script>
+
+    <script>
+        // Wait for the DOM content to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get references to HTML elements
+            const submitButton = document.getElementById("submitButton");
+            const daySelect = document.getElementById("daySelect");
+            const hourSelect = document.getElementById("hourSelect");
+            const minuteSelect = document.getElementById("minuteSelect");
+            const ampmToggle = document.getElementById("ampmToggle");
+            const output = document.getElementById("output");
+            const selectedInfo = document.getElementById("selectedInfo");
+
+            // Event listener for the submit button
+            submitButton.addEventListener("click", function() {
+                // Get the selected values
+                const parkingPass = document.getElementById("textinput").value;
+                const day = daySelect.value;
+                const hour = hourSelect.value;
+                const minute = minuteSelect.value;
+                const ampm = ampmToggle.checked ? "PM" : "AM"; // Correct checkbox access
+
+                // Check if all required fields are filled
+                if (parkingPass && day && hour && minute) {
+                    // Display the selected information
+                    const displayTime = `${hour}:${minute} ${ampm}`;
+                    selectedInfo.innerHTML = `Parking Pass: ${parkingPass} <br> Day: ${day.charAt(0).toUpperCase() + day.slice(1)} Time: ${displayTime}`;
+                    output.style.display = "block";  // Show the output section
+                    console.log(`Selected Day: ${day.charAt(0).toUpperCase() + day.slice(1)} - Time: ${displayTime}`);
+
+                } else {
+                    alert("Please fill in all fields!");
+                    console.log("Missing data, alert shown.");
+                }
+            });
+        });
+    </script>
+    
 </body>
 </html>
