@@ -73,33 +73,6 @@
             <p id="selectedInfo"></p>
         </div>
 
-        <script>
-            document.getElementById("submitButton").addEventListener("click", function () {
-
-                const parkingPass = document.getElementById("textinput").value;
-                const selectedDay = document.getElementById("daySelect").value;
-                const selectedHour = document.getElementById("hourSelect").value;
-                const selectedMinute = document.getElementById("minuteSelect").value;
-                const isPM = document.getElementById("ampmToggle").checked ? "PM" : "AM";
-    
-                const formData = {
-                    parkingPass: parkingPass,
-                    selectedDay: selectedDay,
-                    timeHour: selectedHour,
-                    timeMinute: selectedMinute,
-                    isPM: isPM,
-                };
-    
-                // Store or display the data
-                console.log("Form Data:", formData);
-    
-                // Display the data in the output section
-                const outputDiv = document.getElementById("output");
-                outputDiv.style.display = "block";
-                document.getElementById("selectedInfo").textContent = JSON.stringify(formData, null, 2);
-            });
-        </script>
-
 
         <div class="map-container">
             <!-- <img src="picMap.jpg" /> -->
@@ -156,7 +129,6 @@
     <script src="zoom.js"></script>
 
     <script>
-        /*
         // Wait for the DOM content to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
             // Get references to HTML elements
@@ -181,9 +153,21 @@
                 if (parkingPass && day && hour && minute) {
                     // Display the selected information
                     const displayTime = `${hour}:${minute} ${ampm}`;
-                    selectedInfo.innerHTML = `Parking Pass: ${parkingPass} <br> Day: ${day.charAt(0).toUpperCase() + day.slice(1)} Time: ${displayTime}`;
+                    selectedInfo.innerHTML = `Parking Pass: ${parkingPass} <br> Date: ${day.charAt(0).toUpperCase() + day.slice(1)} @ ${displayTime}`;
                     output.style.display = "block";  // Show the output section
                     console.log(`Selected Day: ${day.charAt(0).toUpperCase() + day.slice(1)} - Time: ${displayTime}`);
+
+                    /* Grant's Portion */
+                    // Create an object to store the data
+                    const formData = {
+                        parkingPass: parkingPass,
+                        day: day,
+                        hour: hour,
+                        minute: minute,
+                        ampm: ampm,
+                    };
+                    // Store or display the data
+                    console.log("Form Data:", formData);
 
                 } else {
                     alert("Please fill in all fields!");
@@ -191,7 +175,6 @@
                 }
             });
         });
-        //*/
     </script>
     
 </body>
