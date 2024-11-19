@@ -73,6 +73,34 @@
             <p id="selectedInfo"></p>
         </div>
 
+        <script>
+            document.getElementById("submitButton").addEventListener("click", function () {
+
+                const parkingPass = document.getElementById("textinput").value;
+                const selectedDay = document.getElementById("daySelect").value;
+                const selectedHour = document.getElementById("hourSelect").value;
+                const selectedMinute = document.getElementById("minuteSelect").value;
+                const isPM = document.getElementById("ampmToggle").checked ? "PM" : "AM";
+    
+                const formData = {
+                    parkingPass: parkingPass,
+                    selectedDay: selectedDay,
+                    timeHour: selectedHour,
+                    timeMinute: selectedMinute,
+                    isPM: isPM,
+                };
+    
+                // Store or display the data
+                console.log("Form Data:", formData);
+    
+                // Display the data in the output section
+                const outputDiv = document.getElementById("output");
+                outputDiv.style.display = "block";
+                document.getElementById("selectedInfo").textContent = JSON.stringify(formData, null, 2);
+            });
+        </script>
+
+
         <div class="map-container">
             <!-- <img src="picMap.jpg" /> -->
             <div id="map" style="height: 60vh; width: 60%;">
