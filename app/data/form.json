@@ -1,7 +1,7 @@
 {
-  "parkingPass": "E5",
-  "selectedDay": "tuesday",
-  "timeHour": "5",
+  "parkingPass": "Reserved",
+  "selectedDay": "Wednesday",
+  "timeHour": "1",
   "timeMinute": "00",
-  "isPM": "AM"
+  "isPM": false
 }

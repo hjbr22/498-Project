@@ -63,52 +63,55 @@ footer {
 
 
 
-label.ampm-switch {
-    z-index: 1;
-    position: relative;
-    box-sizing: border-box;
-    display: inline-block;
-    vertical-align: middle;
-    border-radius: 3px;
-    overflow: hidden;
-    width: 40px;
-    height: 40px;
-    margin: 0;
+.ampm-switch {
+    display: inline-flex;
+    align-items: center;
     cursor: pointer;
-    background-color: #646bbc;
+    user-select: none;
 }
-label.ampm-switch:before,
-label.ampm-switch:after {
-    box-sizing: border-box;
-    display: block;
-    width: 40px;
+
+.ampm-switch input {
+    display: none; /* Hide the default checkbox */
+}
+
+.ampm-switch .slider {
+    width: 50px;
+    height: 25px;
+    background-color: #ccc;
+    border-radius: 25px;
+    position: relative;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.ampm-switch .slider:before {
+    content: "";
+    width: 20px;
     height: 20px;
-    font-size: 12px;
-    /* font-weight: bold; */
-    text-align: center;
-    line-height: 20px;
-    color: white;
-}
-label.ampm-switch:before {
-    content: "AM";
-}
-
-label.ampm-switch:after {
-    content: "PM";
-}
-
-label.ampm-switch input {
+    background-color: white;
+    border-radius: 50%;
     position: absolute;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    margin: 0;
-    padding: 0;
-    border: 0;
-    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0.1);
-    filter: alpha(opacity=0.1);
-    opacity: .001;
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    top: 2.5px;
+    left: 5px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+.ampm-switch input:checked + .slider {
+    background-color: #4caf50; /* Change color when toggled */
+}
+
+.ampm-switch input:checked + .slider:before {
+    transform: translateX(25px); /* Move the knob to the right */
+}
+
+#ampmLabel {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-left: 5px;
+}
+
 
 
 label.ampm-switch .toggle-button {

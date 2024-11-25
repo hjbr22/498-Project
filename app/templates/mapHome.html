@@ -23,7 +23,48 @@
 
     <div class="container">
         <div class="selections">
-            <input type="text" id="textinput" height="100px" width="100px" placeholder="Enter your parking pass" ></input>
+            <label for="parkingPass">Select your parking pass:</label>
+            <select id="parkingPass" style="width: 200px; padding: 5px;">
+                <option value="" disabled selected>Choose a parking pass</option>
+                <option value="Reserved">Reserved</option>
+                <option value="Core">Core</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Employee Periphery">Employee Periphery</option>
+                <option value="OHC">OHC</option>
+                <option value="EX">EX</option>
+                <option value="Employee Commuter">Employee Commuter</option>
+                <option value="Employee Limited">Employee Limited</option>
+                <option value="E10">E10</option>
+                <option value="E-VA">E-VA</option>
+                <option value="EK">EK</option>
+                <option value="R5">R5</option>
+                <option value="R2">R2</option>
+                <option value="R7">R7</option>
+                <option value="R10">R10</option>
+                <option value="R16">R16</option>
+                <option value="R11">R11</option>
+                <option value="R12">R12</option>
+                <option value="R13">R13</option>
+                <option value="R14">R14</option>
+                <option value="R15">R15</option>
+                <option value="R22">R22</option>
+                <option value="R17">R17</option>
+                <option value="R18">R18</option>
+                <option value="R19">R19</option>
+                <option value="R29">R29</option>
+                <option value="R30">R30</option>
+                <option value="RK">RK</option>
+                <option value="X">X</option>
+                <option value="C5">C5</option>
+                <option value="C9">C9</option>
+                <option value="C10">C10</option>
+                <option value="C40">C40</option>
+                <option value="C41">C41</option>
+                <option value="CK">CK</option>
+                <option value="Any valid UK permit">Any valid UK permit</option>
+                <option value="No Permit">No Permit</option>
+            </select>
+
             <select id="daySelect">
                 <option value="">Select Day</option>
                 <option value="sunday">Sunday</option>
@@ -60,9 +101,12 @@
             </select>
 
             <label class="ampm-switch">
-                <input type="checkbox" id="ampmToggle" name="" value="" checked=""> 
-                <div class="toggle-button"></div>
+                <input type="checkbox" id="ampmToggle">
+                <span class="slider"></span>
+                <span id="ampmLabel">AM</span>
             </label>
+            
+            
 
             <button id="submitButton">Submit</button>
 
@@ -74,43 +118,90 @@
         </div>
 
         <script>
-            document.getElementById("submitButton").addEventListener("click", async function () {
-                const parkingPass = document.getElementById("textinput").value;
-                const selectedDay = document.getElementById("daySelect").value;
-                const selectedHour = document.getElementById("hourSelect").value;
-                const selectedMinute = document.getElementById("minuteSelect").value;
-                const isPM = document.getElementById("ampmToggle").checked ? "PM" : "AM";
+            document.addEventListener('DOMContentLoaded', function () {
+                const ampmToggle = document.getElementById("ampmToggle");
+                const ampmLabel = document.getElementById("ampmLabel");
+                const submitButton = document.getElementById("submitButton");
+                const selectedInfo = document.getElementById("selectedInfo");
+                const output = document.getElementById("output");
 
-                const formData = {
-                    parkingPass: parkingPass,
-                    selectedDay: selectedDay,
-                    timeHour: selectedHour,
-                    timeMinute: selectedMinute,
-                    isPM: isPM,
-                };
+                // Update label when the toggle changes
+                ampmToggle.addEventListener('change', function () {
+                    ampmLabel.textContent = ampmToggle.checked ? "PM" : "AM";
+                });
 
-                try {
-                    const response = await fetch('/data', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData),
-                    });
+                // Event listener for the submit button
+                submitButton.addEventListener("click", function () {
+                    const parkingPass = document.getElementById("parkingPass").value;
+                    const day = document.getElementById("daySelect").value;
+                    const hour = document.getElementById("hourSelect").value;
+                    const minute = document.getElementById("minuteSelect").value;
+                    const isPM = ampmToggle.checked;
 
-                    const result = await response.json();
-                    console.log(result);
+                    // Check if all required fields are filled
+                    if (parkingPass && day && hour && minute) {
+                        // Format the data to match the desired structure
+                        const formData = {
+                            parkingPass: parkingPass,
+                            selectedDay: day.charAt(0).toUpperCase() + day.slice(1),
+                            timeHour: hour,
+                            timeMinute: minute,
+                            isPM: isPM,
+                        };
+                        
+                        // Checking the correct time
+                        const displayTime = `${hour}:${minute} ${isPM ? "PM" : "AM"}`;
+                        selectedInfo.innerHTML = `Parking Pass: ${parkingPass} <br> Day: ${formData.selectedDay} <br> Time: ${displayTime}`;
+                        output.style.display = "block";
 
-                    if (result.status === 'success') {
-                        alert(result.message);
+                        // Save data to the server
+                        saveFormData(formData);
                     } else {
-                        alert(result.message);
+                        alert("Please fill in all fields!");
                     }
-                } catch (error) {
-                    console.error('Error submitting form data:', error);
-                    alert('An error occurred while submitting data.');
-                }
+                });
             });
 
+            // Function to save data (POST)
+            function saveFormData(formData) {
+                fetch('/parking-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Save Response:', data);
+                    if (data.status === 'success') {
+                        // Automatically fetch processed data
+                        fetchProcessedData();
+                    } else {
+                        alert('Error saving data: ' + data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
+            // Function to get processed data (GET)
+            function fetchProcessedData() {
+                fetch('/parking-data')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Processed Data:', data);
+                        if (data.status === 'success') {
+                            console.log('Processed Data Retrieved Successfully:', data);
+                            alert(`Available parking lots: ${JSON.stringify(data.availableParkingLots)}`);
+                        } else {
+                            alert('Error retrieving data: ' + data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
         </script>
+        
+        
 
 
         <div class="map-container">
@@ -166,41 +257,39 @@
     </footer>
 
     <script>
-        // Wait for the DOM content to be fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get references to HTML elements
+        document.addEventListener('DOMContentLoaded', function () {
+            const ampmToggle = document.getElementById("ampmToggle");
+            const ampmLabel = document.getElementById("ampmLabel");
             const submitButton = document.getElementById("submitButton");
+            const parkingPass = document.getElementById("parkingPass");
             const daySelect = document.getElementById("daySelect");
             const hourSelect = document.getElementById("hourSelect");
             const minuteSelect = document.getElementById("minuteSelect");
-            const ampmToggle = document.getElementById("ampmToggle");
-            const output = document.getElementById("output");
             const selectedInfo = document.getElementById("selectedInfo");
+            const output = document.getElementById("output");
 
-            // Event listener for the submit button
-            submitButton.addEventListener("click", function() {
-                // Get the selected values
-                const parkingPass = document.getElementById("textinput").value;
+            // Update AM/PM Label
+            ampmToggle.addEventListener('change', function () {
+                ampmLabel.textContent = ampmToggle.checked ? "PM" : "AM";
+            });
+
+            // Submit Button Click Event
+            submitButton.addEventListener("click", function () {
+                const selectedPass = parkingPass.value;
                 const day = daySelect.value;
                 const hour = hourSelect.value;
                 const minute = minuteSelect.value;
-                const ampm = ampmToggle.checked ? "PM" : "AM"; // Correct checkbox access
+                const isPM = ampmToggle.checked;
 
-                // Check if all required fields are filled
-                if (parkingPass && day && hour && minute) {
-                    // Display the selected information
-                    const displayTime = `${hour}:${minute} ${ampm}`;
-                    selectedInfo.innerHTML = `Parking Pass: ${parkingPass} <br> Day: ${day.charAt(0).toUpperCase() + day.slice(1)} Time: ${displayTime}`;
-                    output.style.display = "block";  // Show the output section
-                    console.log(`Selected Day: ${day.charAt(0).toUpperCase() + day.slice(1)} - Time: ${displayTime}`);
-
+                if (selectedPass && day && hour && minute) {
+                    const displayTime = `${hour}:${minute} ${isPM ? "PM" : "AM"}`;
+                    selectedInfo.innerHTML = `Parking Pass: ${selectedPass} <br> Day: ${day.charAt(0).toUpperCase() + day.slice(1)} <br> Time: ${displayTime}`;
+                    output.style.display = "block";
                 } else {
                     alert("Please fill in all fields!");
-                    console.log("Missing data, alert shown.");
                 }
             });
         });
     </script>
-    
 </body>
 </html>
