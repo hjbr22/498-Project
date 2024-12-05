@@ -1,3 +1,9 @@
+"""
+Run get_parking_coordinate_dict(military_time, weekend_bool, pass_name)
+Should return a dictionary with parking lot names as the keys, and the coordinate arrays as the values
+There should be an example of use in database_logic_preview.ipynb
+
+"""
 import pandas as pd
 
 def split_time_range(value):
@@ -63,3 +69,22 @@ def get_parking_lots_main(excel_path, time, weekend_bool, parking_pass):
             split_columns.columns = [f'{col}_start', f'{col}_end']
             weekday_times_split = pd.concat([weekday_times_split, split_columns], axis=1)
         return get_parking_lots_single(weekday_times_split, time, parking_pass)
+     
+def create_coordinates_dict(excel_path):
+    df = pd.read_excel(excel_path, sheet_name="Coordinates")
+    
+    coordinates_dict = {}
+    for _, row in df.iterrows():
+        lot_name = row.iloc[0]  
+        lat = row["º N"]
+        long = row["º W"]
+        coordinates_dict[lot_name] = [lat, long]
+    
+    return coordinates_dict
+
+def filter_coordinates_by_keys(coordinates_dict, keys_to_include):
+    filtered_dict = {key: coordinates_dict[key] for key in keys_to_include if key in coordinates_dict}
+    return filtered_dict
+
+def get_parking_coordinate_dict(curr_time, weekend_bool, pass_name, file_name="../data/UK Parking w Zip Codes.xlsx"):
+    return filter_coordinates_by_keys(create_coordinates_dict(file_name), get_parking_lots_main(file_name, curr_time, weekend_bool, pass_name))
