@@ -13,6 +13,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
+
     <!-- not in need but could be useful for general location searching in future versions.
      <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
@@ -122,94 +123,7 @@
         </div>
 
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const ampmToggle = document.getElementById("ampmToggle");
-                const ampmLabel = document.getElementById("ampmLabel");
-                const submitButton = document.getElementById("submitButton");
-                const selectedInfo = document.getElementById("selectedInfo");
-                const output = document.getElementById("output");
-
-
-                // Update label when the toggle changes
-                ampmToggle.addEventListener('change', function () {
-                    ampmLabel.textContent = ampmToggle.checked ? "PM" : "AM";
-                });
-
-                // Event listener for the submit button
-                submitButton.addEventListener("click", function () {
-                    const parkingPass = document.getElementById("parkingPass").value;
-                    const day = document.getElementById("daySelect").value;
-                    const hour = document.getElementById("hourSelect").value;
-                    const minute = document.getElementById("minuteSelect").value;
-                    const isPM = ampmToggle.checked;
-
-                    // Check if all required fields are filled
-                    if (parkingPass && day && hour && minute) {
-                        // Format the data to match the desired structure
-                        const formData = {
-                            parkingPass: parkingPass,
-                            selectedDay: day.charAt(0).toUpperCase() + day.slice(1),
-                            timeHour: hour,
-                            timeMinute: minute,
-                            isPM: isPM,
-                        };
-                        
-                        // Checking the correct time
-                        const displayTime = `${hour}:${minute} ${isPM ? "PM" : "AM"}`;
-                        selectedInfo.innerHTML = `Parking Pass: ${parkingPass} <br> Day: ${formData.selectedDay} <br> Time: ${displayTime}`;
-                        output.style.display = "block";
-
-                        // Save form data to server and then handle the parkingLots data
-                        saveFormData(formData);
-
-
-                    } else {
-                        alert("Please fill in all fields!");
-                    }
-                });
-            });
-
-            // Function to save data (POST)
-            function saveFormData(formData) {
-                return fetch('/parking-data', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Save Response:', data);
-                    if (data.status === 'success') {
-                        // Automatically fetch processed data
-                        return fetchProcessedData();
-                    } else {
-                        alert('Error saving data: ' + data.message);
-                        return Promise.reject('Save failed');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            }
-
-            // Function to get processed data (GET)
-            function fetchProcessedData() {
-                return fetch('/parking-data')
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Processed Data:', data);
-                        if (data.status === 'success') {
-                            console.log('Processed Data Retrieved Successfully:', data);
-                            parkingLots = JSON.stringify(data.availableParkingLots);
-                            alert(`Available parking lots: ${parkingLots}`);
-                            return parkingLots;
-                        } else {
-                            alert('Error retrieving data: ' + data.message);
-                            return Promise.reject('Parking data retrieval failed');
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            }
+  
 
         </script>
         
@@ -227,8 +141,13 @@
                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     }).addTo(map);
 
+                    let meMarker;
+                    let allMarkers = [];
+                    let markerCoords = [];
+                    let allPaths = [];
 
                     map.locate({ setView: true, maxZoom: 22, minZoom: 10});
+
                     map.on('locationfound', function(e) {
 
                         var meCircle = L.circle(e.latlng, {
@@ -239,21 +158,156 @@
                         }).addTo(map);
                         map.setView(e.latlng, 18);
 
-                        var meMarker = L.marker(e.latlng, {
+                        meMarker = L.marker(e.latlng, {
                             icon: L.icon({
                                 iconUrl: 'static/resources/mapsvg/danialruddy_marker.svg',
                                 iconSize: [54, 48],
                                 iconAnchor: [16, 44],
                                 popupAnchor: [0, -48]
                             })
-                        }).addTo(map);
+                        });
+                        meMarker.addTo(map);
                         meMarker.bindPopup("<b>You are here, give or take 100ft!</b>")/*.openPopup()*/;
+                        markerCoords.push(e.latlng);
 
                     });
                     map.on('locationerror', function(e) {
                         alert("Location access denied. Please allow location access in your browser for proper functionality.");
                     });
 
+
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const ampmToggle = document.getElementById("ampmToggle");
+                        const ampmLabel = document.getElementById("ampmLabel");
+                        const submitButton = document.getElementById("submitButton");
+                        const selectedInfo = document.getElementById("selectedInfo");
+                        const output = document.getElementById("output");
+
+
+                        // Update label when the toggle changes
+                        ampmToggle.addEventListener('change', function () {
+                            ampmLabel.textContent = ampmToggle.checked ? "PM" : "AM";
+                        });
+
+                        // Event listener for the submit button
+                        submitButton.addEventListener("click", function () {
+                            const parkingPass = document.getElementById("parkingPass").value;
+                            const day = document.getElementById("daySelect").value;
+                            const hour = document.getElementById("hourSelect").value;
+                            const minute = document.getElementById("minuteSelect").value;
+                            const isPM = ampmToggle.checked;
+
+                            // Check if all required fields are filled
+                            if (parkingPass && day && hour && minute) {
+                                // Format the data to match the desired structure
+                                const formData = {
+                                    parkingPass: parkingPass,
+                                    selectedDay: day.charAt(0).toUpperCase() + day.slice(1),
+                                    timeHour: hour,
+                                    timeMinute: minute,
+                                    isPM: isPM,
+                                };
+                                
+                                // Checking the correct time
+                                const displayTime = `${hour}:${minute} ${isPM ? "PM" : "AM"}`;
+                                selectedInfo.innerHTML = `Parking Pass: ${parkingPass} <br> Day: ${formData.selectedDay} <br> Time: ${displayTime}`;
+                                output.style.display = "block";
+
+                                // Save form data to server and then handle the parkingLots data
+                                saveFormData(formData).then((parkingLots) => {
+                                    availableLots = JSON.parse(parkingLots);
+                                    // Loop through the JSON object and add markers
+                                    Object.entries(availableLots).forEach(([label, coordinates]) => {
+                                        console.log(label, coordinates);
+                                        const marker = L.marker(coordinates);
+                                        allMarkers.push(marker);
+                                        marker.addTo(map); // Add marker to the map
+                                        markerCoords.push(coordinates);
+                                        marker.bindPopup(
+                                            "<div><b style='font-size: 16px;'>" + label + " Lot</b><br><br>" + 
+                                            "<i>Coordinates:</i><br>" + 
+                                            "<i>" + coordinates[0] + ", " + coordinates[1] + "</i></div>"
+                                        );
+                                        map.fitBounds(markerCoords);
+                                        // Create a polyline (path) between the current marker and meMarker
+                                        //const path = L.polyline([marker, meMarker], {color: 'blue'}).addTo(map);
+                                    });
+
+                                    let shortestDistance = Infinity;  // Start with a very large number
+                                    let closestMarker;
+
+                                    // Loop through all markers and calculate the distance to the target marker
+                                    allMarkers.forEach(markerObj => {
+                                        var distance = meMarker.getLatLng().distanceTo(markerObj.getLatLng());
+
+                                        // If this is the shortest distance, update the closest marker and shortest distance
+                                        if (distance < shortestDistance) {
+                                            shortestDistance = distance;
+                                            closestMarker = markerObj;
+                                        }
+                                    });
+                                    if (closestMarker) {
+                                        console.log("Closest parking lot to the user is at: " + closestMarker.getLatLng());
+                                        // Draw a path (polyline) between meMarker and the closest parking lot
+                                        const path = L.polyline([meMarker.getLatLng(), closestMarker.getLatLng()], {
+                                            color: '#005AA7',
+                                            weight: 10,
+                                            opacity: 1
+                                        });
+                                        path.addTo(map);
+                                        allPaths.push(path);
+                                    }
+                                    
+                                });
+
+
+                            } else {
+                                alert("Please fill in all fields!");
+                            }
+                        });
+                    });
+
+                    // Function to save data (POST)
+                    function saveFormData(formData) {
+                        return fetch('/parking-data', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(formData),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Save Response:', data);
+                            if (data.status === 'success') {
+                                // Automatically fetch processed data
+                                return fetchProcessedData();
+                            } else {
+                                alert('Error saving data: ' + data.message);
+                                return Promise.reject('Save failed');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    }
+
+                    // Function to get processed data (GET)
+                    function fetchProcessedData() {
+                        return fetch('/parking-data')
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Processed Data:', data);
+                                if (data.status === 'success') {
+                                    console.log('Processed Data Retrieved Successfully:', data);
+                                    parkingLots = JSON.stringify(data.availableParkingLots);
+                                    alert(`Available parking lots: ${parkingLots}`);
+                                    return parkingLots;
+                                } else {
+                                    alert('Error retrieving data: ' + data.message);
+                                    return Promise.reject('Parking data retrieval failed');
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                    }
 
                 </script>
             </div>
@@ -268,40 +322,5 @@
         </p>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const ampmToggle = document.getElementById("ampmToggle");
-            const ampmLabel = document.getElementById("ampmLabel");
-            const submitButton = document.getElementById("submitButton");
-            const parkingPass = document.getElementById("parkingPass");
-            const daySelect = document.getElementById("daySelect");
-            const hourSelect = document.getElementById("hourSelect");
-            const minuteSelect = document.getElementById("minuteSelect");
-            const selectedInfo = document.getElementById("selectedInfo");
-            const output = document.getElementById("output");
-
-            // Update AM/PM Label
-            ampmToggle.addEventListener('change', function () {
-                ampmLabel.textContent = ampmToggle.checked ? "PM" : "AM";
-            });
-
-            // Submit Button Click Event
-            submitButton.addEventListener("click", function () {
-                const selectedPass = parkingPass.value;
-                const day = daySelect.value;
-                const hour = hourSelect.value;
-                const minute = minuteSelect.value;
-                const isPM = ampmToggle.checked;
-
-                if (selectedPass && day && hour && minute) {
-                    const displayTime = `${hour}:${minute} ${isPM ? "PM" : "AM"}`;
-                    selectedInfo.innerHTML = `Parking Pass: ${selectedPass} <br> Day: ${day.charAt(0).toUpperCase() + day.slice(1)} <br> Time: ${displayTime}`;
-                    output.style.display = "block";
-                } else {
-                    alert("Please fill in all fields!");
-                }
-            });
-        });
-    </script>
 </body>
 </html>
