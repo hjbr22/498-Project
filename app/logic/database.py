@@ -86,5 +86,6 @@ def filter_coordinates_by_keys(coordinates_dict, keys_to_include):
     filtered_dict = {key: coordinates_dict[key] for key in keys_to_include if key in coordinates_dict}
     return filtered_dict
 
-def get_parking_coordinate_dict(curr_time, weekend_bool, pass_name, file_name="../data/UK Parking w Zip Codes.xlsx"):
+def get_parking_coordinate_dict(curr_time, weekend_bool, pass_name, file_name="../data/UK_Parking_Coords.xlsx"):
     return filter_coordinates_by_keys(create_coordinates_dict(file_name), get_parking_lots_main(file_name, curr_time, weekend_bool, pass_name))
+    
