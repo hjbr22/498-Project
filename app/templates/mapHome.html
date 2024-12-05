@@ -10,9 +10,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
      crossorigin=""/>
-     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
+    <!-- not in need but could be useful for general location searching in future versions.
+     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    -->
 </head>
 <body>
 
@@ -125,6 +129,7 @@
                 const selectedInfo = document.getElementById("selectedInfo");
                 const output = document.getElementById("output");
 
+
                 // Update label when the toggle changes
                 ampmToggle.addEventListener('change', function () {
                     ampmLabel.textContent = ampmToggle.checked ? "PM" : "AM";
@@ -154,8 +159,10 @@
                         selectedInfo.innerHTML = `Parking Pass: ${parkingPass} <br> Day: ${formData.selectedDay} <br> Time: ${displayTime}`;
                         output.style.display = "block";
 
-                        // Save data to the server
+                        // Save form data to server and then handle the parkingLots data
                         saveFormData(formData);
+
+
                     } else {
                         alert("Please fill in all fields!");
                     }
@@ -164,7 +171,7 @@
 
             // Function to save data (POST)
             function saveFormData(formData) {
-                fetch('/parking-data', {
+                return fetch('/parking-data', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -176,9 +183,10 @@
                     console.log('Save Response:', data);
                     if (data.status === 'success') {
                         // Automatically fetch processed data
-                        fetchProcessedData();
+                        return fetchProcessedData();
                     } else {
                         alert('Error saving data: ' + data.message);
+                        return Promise.reject('Save failed');
                     }
                 })
                 .catch(error => console.error('Error:', error));
@@ -186,19 +194,23 @@
 
             // Function to get processed data (GET)
             function fetchProcessedData() {
-                fetch('/parking-data')
+                return fetch('/parking-data')
                     .then(response => response.json())
                     .then(data => {
                         console.log('Processed Data:', data);
                         if (data.status === 'success') {
                             console.log('Processed Data Retrieved Successfully:', data);
-                            alert(`Available parking lots: ${JSON.stringify(data.availableParkingLots)}`);
+                            parkingLots = JSON.stringify(data.availableParkingLots);
+                            alert(`Available parking lots: ${parkingLots}`);
+                            return parkingLots;
                         } else {
                             alert('Error retrieving data: ' + data.message);
+                            return Promise.reject('Parking data retrieval failed');
                         }
                     })
                     .catch(error => console.error('Error:', error));
             }
+
         </script>
         
         
