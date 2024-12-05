@@ -183,7 +183,6 @@
                         const selectedInfo = document.getElementById("selectedInfo");
                         const output = document.getElementById("output");
 
-
                         // Update label when the toggle changes
                         ampmToggle.addEventListener('change', function () {
                             ampmLabel.textContent = ampmToggle.checked ? "PM" : "AM";
@@ -196,6 +195,12 @@
                             const hour = document.getElementById("hourSelect").value;
                             const minute = document.getElementById("minuteSelect").value;
                             const isPM = ampmToggle.checked;
+
+                            // Clear all markers and paths except meMarker
+                            allMarkers.forEach(marker => map.removeLayer(marker));
+                            allPaths.forEach(path => map.removeLayer(path));
+                            allMarkers = []; // Reset markers array
+                            allPaths = []; // Reset paths array
 
                             // Check if all required fields are filled
                             if (parkingPass && day && hour && minute) {
@@ -299,7 +304,7 @@
                                 if (data.status === 'success') {
                                     console.log('Processed Data Retrieved Successfully:', data);
                                     parkingLots = JSON.stringify(data.availableParkingLots);
-                                    alert(`Available parking lots: ${parkingLots}`);
+                                    //alert(`Available parking lots: ${parkingLots}`);
                                     return parkingLots;
                                 } else {
                                     alert('Error retrieving data: ' + data.message);
