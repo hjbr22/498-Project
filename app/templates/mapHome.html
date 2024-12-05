@@ -201,6 +201,8 @@
                             allPaths.forEach(path => map.removeLayer(path));
                             allMarkers = []; // Reset markers array
                             allPaths = []; // Reset paths array
+                            markerCoords = []; // erase log of coordinates
+                            markerCoords.push(meMarker.getLatLng());
 
                             // Check if all required fields are filled
                             if (parkingPass && day && hour && minute) {
@@ -233,10 +235,10 @@
                                             "<i>Coordinates:</i><br>" + 
                                             "<i>" + coordinates[0] + ", " + coordinates[1] + "</i></div>"
                                         );
-                                        map.fitBounds(markerCoords);
                                         // Create a polyline (path) between the current marker and meMarker
                                         //const path = L.polyline([marker, meMarker], {color: 'blue'}).addTo(map);
                                     });
+                                    map.fitBounds(markerCoords);
 
                                     let shortestDistance = Infinity;  // Start with a very large number
                                     let closestMarker;
