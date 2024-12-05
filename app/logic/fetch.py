@@ -1,13 +1,13 @@
 import json
 import os
-from logic.database import get_parking_lots_main
+from logic.database import get_parking_coordinate_dict
 
 # Define paths
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # Root app directory
 DATA_DIR = os.path.join(BASE_DIR, "data")
 INPUT_FILE = os.path.join(DATA_DIR, "form.json")
 OUTPUT_FILE = os.path.join(DATA_DIR, "output.json")
-EXCEL_FILE = os.path.join(DATA_DIR, "UK_Parking.xlsx")  # Excel file at root of app directory
+EXCEL_FILE = os.path.join(DATA_DIR, "UK_Parking_Coords.xlsx")  # Excel file at root of app directory
 
 def load_form_data(file_path):
     """Load data from form.json."""
@@ -61,7 +61,7 @@ def process_parking_data():
     # Call database logic to get available parking lots
     try:
         print(f"Debug: Attempting to access Excel file: {EXCEL_FILE}")
-        available_parking_lots = get_parking_lots_main(EXCEL_FILE, time_in_24hr, weekend_bool, parking_pass)
+        available_parking_lots = get_parking_coordinate_dict(time_in_24hr, weekend_bool, parking_pass)
 
         if available_parking_lots:
             print("Debug: Successfully retrieved parking lot data from Excel.")
