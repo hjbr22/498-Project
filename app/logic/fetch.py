@@ -61,7 +61,7 @@ def process_parking_data():
     # Call database logic to get available parking lots
     try:
         print(f"Debug: Attempting to access Excel file: {EXCEL_FILE}")
-        available_parking_lots = get_parking_coordinate_dict(time_in_24hr, weekend_bool, parking_pass)
+        available_parking_lots = get_parking_coordinate_dict(time_in_24hr, weekend_bool, parking_pass, EXCEL_FILE)
 
         if available_parking_lots:
             print("Debug: Successfully retrieved parking lot data from Excel.")
